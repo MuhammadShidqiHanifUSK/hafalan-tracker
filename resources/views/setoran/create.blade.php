@@ -1,95 +1,143 @@
-<x-layouts.app>
-    <x-slot name="title">Tambah Setoran</x-slot>
+<x-layouts::app title="Tambah Setoran">
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    .ts-wrapper .ts-control {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 0.375rem !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+        box-shadow: none !important;
+    }
+    .ts-wrapper .ts-dropdown {
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: 1px solid #d1d5db !important;
+    }
+    .ts-wrapper .ts-dropdown .option:hover,
+    .ts-wrapper .ts-dropdown .option.active {
+        background: #dbeafe !important;
+        color: #1e40af !important;
+    }
+    .ts-wrapper.single .ts-control:after {
+        border-color: #6b7280 transparent transparent !important;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css">
 
-    <div class="max-w-4xl mx-auto px-4 py-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Setoran</h1>
-            <a href="{{ route('setoran.index') }}"
-                class="text-gray-600 hover:underline">← Kembali</a>
-        </div>
+    <div style="color: #111827;">
+        <div style="max-width: 56rem; margin: 0 auto; padding: 1.5rem 1rem;">
 
-        <form action="{{ route('setoran.store') }}" method="POST">
-            @csrf
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; background: #ffffff; padding: 0.5rem 1rem; border-radius: 0.5rem;">Tambah Setoran</h1>
+                <a href="{{ route('setoran.index') }}" style="color: #4b5563; text-decoration: underline;">← Kembali</a>
+            </div>
 
-            <div class="bg-white rounded shadow p-6 space-y-6">
+            <form action="{{ route('setoran.store') }}" method="POST">
+                @csrf
 
-                {{-- Pilih Santri & Tanggal --}}
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Santri</label>
-                        <select name="user_id" class="w-full border rounded px-3 py-2 text-sm">
-                            <option value="">-- Pilih Santri --</option>
-                            @foreach($santris as $santri)
-                                <option value="{{ $santri->id }}" {{ old('user_id') == $santri->id ? 'selected' : '' }}>
-                                    {{ $santri->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('user_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                        <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}"
-                            class="w-full border rounded px-3 py-2 text-sm">
-                        @error('tanggal') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-                </div>
+                <div style="background: #f9fafb; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem;">
 
-                {{-- Sabaq --}}
-                <div class="border rounded p-4">
-                    <h2 class="font-semibold text-gray-700 mb-3">Sabaq (Hafalan Baru)</h2>
-                    <div class="grid grid-cols-2 gap-4">
+                    {{-- Pilih Santri & Tanggal --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Surah</label>
-                            <select name="sabaq_surah_id" class="w-full border rounded px-3 py-2 text-sm">
-                                <option value="">-- Pilih Surah --</option>
-                                @foreach($surahs as $surah)
-                                    <option value="{{ $surah->id }}" {{ old('sabaq_surah_id') == $surah->id ? 'selected' : '' }}>
-                                        {{ $surah->nomor }}. {{ $surah->nama_latin }}
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Santri</label>
+                            <select name="user_id" id="select-santri">
+                                <option value="">-- Pilih Santri --</option>
+                                @foreach($santris as $santri)
+                                    <option value="{{ $santri->id }}" {{ old('user_id') == $santri->id ? 'selected' : '' }}>
+                                        {{ $santri->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('sabaq_surah_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('user_id') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nilai</label>
-                            <select name="sabaq_nilai" class="w-full border rounded px-3 py-2 text-sm">
-                                <option value="">-- Pilih Nilai --</option>
-                                <option value="L" {{ old('sabaq_nilai') == 'L' ? 'selected' : '' }}>L (Lancar)</option>
-                                <option value="KL" {{ old('sabaq_nilai') == 'KL' ? 'selected' : '' }}>KL (Kurang Lancar)</option>
-                                <option value="U" {{ old('sabaq_nilai') == 'U' ? 'selected' : '' }}>U (Harus Diulang)</option>
-                            </select>
-                            @error('sabaq_nilai') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Ayat Mulai</label>
-                            <input type="number" name="sabaq_ayat_mulai" value="{{ old('sabaq_ayat_mulai') }}"
-                                class="w-full border rounded px-3 py-2 text-sm" min="1">
-                            @error('sabaq_ayat_mulai') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Ayat Selesai</label>
-                            <input type="number" name="sabaq_ayat_selesai" value="{{ old('sabaq_ayat_selesai') }}"
-                                class="w-full border rounded px-3 py-2 text-sm" min="1">
-                            @error('sabaq_ayat_selesai') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Baris</label>
-                            <input type="number" name="sabaq_jumlah_baris" value="{{ old('sabaq_jumlah_baris') }}"
-                                class="w-full border rounded px-3 py-2 text-sm" min="1">
-                            @error('sabaq_jumlah_baris') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Tanggal</label>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}"
+                                style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #ffffff; color: #111827; color-scheme: light;">
+                            @error('tanggal') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
                         </div>
                     </div>
-                </div>
 
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                        Simpan Setoran
-                    </button>
-                </div>
+                    {{-- Sabaq --}}
+                    <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem; background: #ffffff; margin-bottom: 1.5rem;">
+                        <h2 style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Sabaq (Hafalan Baru)</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Surah</label>
+                                <select name="sabaq_surah_id" id="select-sabaq-surah" style="width: 100%;">
+                                    <option value="">-- Cari Surah --</option>
+                                    @foreach($surahs as $surah)
+                                        <option value="{{ $surah->id }}" {{ old('sabaq_surah_id') == $surah->id ? 'selected' : '' }}>
+                                            {{ $surah->nomor }}. {{ $surah->nama_latin }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('sabaq_surah_id') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Nilai</label>
+                                <select name="sabaq_nilai" style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #ffffff; color: #111827;">
+                                    <option value="">-- Pilih Nilai --</option>
+                                    <option value="L" {{ old('sabaq_nilai') == 'L' ? 'selected' : '' }}>L (Lancar)</option>
+                                    <option value="KL" {{ old('sabaq_nilai') == 'KL' ? 'selected' : '' }}>KL (Kurang Lancar)</option>
+                                    <option value="U" {{ old('sabaq_nilai') == 'U' ? 'selected' : '' }}>U (Harus Diulang)</option>
+                                </select>
+                                @error('sabaq_nilai') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Ayat Mulai</label>
+                                <input type="number" name="sabaq_ayat_mulai" value="{{ old('sabaq_ayat_mulai') }}" min="1" placeholder="contoh: 1"
+                                    style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #ffffff; color: #111827;">
+                                @error('sabaq_ayat_mulai') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Ayat Selesai</label>
+                                <input type="number" name="sabaq_ayat_selesai" value="{{ old('sabaq_ayat_selesai') }}" min="1" placeholder="contoh: 10"
+                                    style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #ffffff; color: #111827;">
+                                @error('sabaq_ayat_selesai') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Jumlah Baris</label>
+                                <input type="number" name="sabaq_jumlah_baris" value="{{ old('sabaq_jumlah_baris') }}" min="1" placeholder="contoh: 8"
+                                    style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; font-size: 0.875rem; background: #ffffff; color: #111827;">
+                                @error('sabaq_jumlah_baris') <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.25rem;">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
-        </form>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button type="submit"
+                            style="background: #2563eb; color: #ffffff; padding: 0.5rem 1.5rem; border-radius: 0.375rem; border: none; cursor: pointer; font-size: 0.875rem; font-weight: 500;">
+                            Simpan Setoran
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
     </div>
-</x-layouts.app>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+    new TomSelect('#select-sabaq-surah', {
+        maxOptions: 114,
+        allowEmptyOption: false,
+        placeholder: 'Ketik nama atau nomor surah...',
+    });
+    new TomSelect('#select-santri', {
+        maxOptions: 100,
+        allowEmptyOption: true,
+        placeholder: 'Ketik nama santri...',
+    });
+</script>
+</x-layouts::app>

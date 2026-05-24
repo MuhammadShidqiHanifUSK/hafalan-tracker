@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sabqi extends Model
 {
+    protected $table = 'sabqi';
+    
     protected $fillable = [
         'setoran_id',
         'surah_id',
