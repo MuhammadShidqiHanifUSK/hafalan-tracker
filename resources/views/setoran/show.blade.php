@@ -30,8 +30,15 @@
                 <td class="info-value">
                     @if($setoran->paraf_guru)
                         <span class="badge-sudah">✓ Sudah</span>
-                    @else
+                     @else
                         <span class="badge-belum">✗ Belum</span>
+                        <form action="{{ route('setoran.paraf-guru', $setoran->id) }}" method="POST" style="display:inline; margin-left: 0.5rem;">
+                             @csrf
+                            @method('PATCH')
+                            <button type="submit" style="background: #16a34a; color: #fff; border: none; border-radius: 6px; padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                                ✍️ Paraf Sekarang
+                            </button>
+                        </form>
                     @endif
                 </td>
             </tr>
@@ -40,9 +47,16 @@
                 <td class="info-value">
                     @if($setoran->paraf_ortu)
                         <span class="badge-sudah">✓ Sudah</span>
-                    @else
+                     @else
                         <span class="badge-belum">✗ Belum</span>
-                    @endif
+                        <form action="{{ route('setoran.paraf-ortu', $setoran->id) }}" method="POST" style="display:inline; margin-left: 0.5rem;">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" style="background: #2563eb; color: #fff; border: none; border-radius: 6px; padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                            ✍️ Paraf Sekarang
+                        </button>
+                        </form>
+                     @endif
                 </td>
             </tr>
         </table>

@@ -200,4 +200,24 @@ class SetoranController extends Controller
         return redirect()->route('setoran.index')
             ->with('success', 'Setoran berhasil dihapus!');
     }
+
+    // Paraf guru
+    public function parafGuru($id)
+    {
+        $setoran = Setoran::findOrFail($id);
+        $setoran->update(['paraf_guru' => true]);
+
+        return redirect()->route('setoran.show', $id)
+            ->with('success', 'Paraf guru berhasil disimpan!');
+    }
+
+    // Paraf ortu
+    public function parafOrtu($id)
+    {
+        $setoran = Setoran::findOrFail($id);
+        $setoran->update(['paraf_ortu' => true]);
+
+        return redirect()->route('setoran.show', $id)
+            ->with('success', 'Paraf orang tua berhasil disimpan!');
+    }
 }
