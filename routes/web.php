@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SantriController;
+use App\Http\Controllers\OrtuController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -20,7 +21,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Route khusus ortu
     Route::middleware(['role:ortu'])->group(function () {
-        Route::patch('setoran/{id}/paraf-ortu', [SetoranController::class, 'parafOrtu'])->name('setoran.paraf-ortu');
+        Route::get('setoran-anak', [OrtuController::class, 'index'])->name('ortu.index');
+        Route::get('setoran-anak/{id}', [OrtuController::class, 'show'])->name('ortu.show');
+        Route::patch('setoran-anak/{id}/paraf', [OrtuController::class, 'parafOrtu'])->name('ortu.paraf');
     });
 
     // Route khusus santri
