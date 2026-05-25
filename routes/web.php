@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SantriController;
 use App\Http\Controllers\OrtuController;
+use App\Http\Controllers\AdminController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -12,6 +13,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
+    // Route khusus admin
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('admin/users', AdminController::class)->names('admin');
+    });
 
     // Route khusus ustadz
     Route::middleware(['role:ustadz'])->group(function () {
