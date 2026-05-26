@@ -5,6 +5,7 @@ use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SantriController;
 use App\Http\Controllers\OrtuController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CatatanSetoranController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -50,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:santri'])->group(function () {
         Route::get('riwayat', [SantriController::class, 'index'])->name('santri.index');
         Route::get('riwayat/{id}', [SantriController::class, 'show'])->name('santri.show');
+    });
+
+    // Route catatan (ustadz & ortu)
+    Route::middleware(['role:ustadz,ortu'])->group(function () {
+        Route::post('setoran/{setoranId}/catatan', [CatatanSetoranController::class, 'store'])->name('catatan.store');
     });
 
 });

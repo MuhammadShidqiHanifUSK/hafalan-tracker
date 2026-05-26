@@ -145,6 +145,7 @@
     {{-- Catatan --}}
     <div class="hafalan-card">
         <h2 class="hafalan-card-title">💬 Catatan Ustadz & Orang Tua</h2>
+
         @forelse($setoran->catatanSetoran as $catatan)
             <div style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; background: #f9fafb;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
@@ -154,8 +155,22 @@
                 <p style="font-size: 0.875rem; color: #374151; margin: 0;">{{ $catatan->isi_catatan }}</p>
             </div>
         @empty
-            <p style="color: #9ca3af; font-size: 0.875rem;">Belum ada catatan.</p>
+            <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 1rem;">Belum ada catatan.</p>
         @endforelse
+
+        {{-- Form tambah catatan --}}
+        <form action="{{ route('catatan.store', $setoran->id) }}" method="POST" style="margin-top: 1rem;">
+            @csrf
+            <div class="form-group">
+                <label class="form-label">Tambah Catatan</label>
+                <textarea name="isi_catatan" rows="3" placeholder="Tulis catatan untuk orang tua..."
+                    class="form-input" style="resize: vertical;">{{ old('isi_catatan') }}</textarea>
+                @error('isi_catatan') <p class="form-error">{{ $message }}</p> @enderror
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+                <button type="submit" class="btn-submit">💬 Kirim Catatan</button>
+            </div>
+        </form>
     </div>
 
 </div>
