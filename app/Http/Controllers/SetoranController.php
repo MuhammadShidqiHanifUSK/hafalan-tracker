@@ -66,6 +66,23 @@ class SetoranController extends Controller
             'manzil_nilai'          => 'required|in:L,KL,U',
         ]);
 
+       // Validasi ayat selesai harus >= ayat mulai
+        $errors = [];
+
+        if ((int)$request->sabaq_ayat_selesai < (int)$request->sabaq_ayat_mulai) {
+            $errors['sabaq_ayat_selesai'] = 'Ayat selesai sabaq harus lebih besar atau sama dengan ayat mulai.';
+        }
+        if ((int)$request->sabqi_ayat_selesai < (int)$request->sabqi_ayat_mulai) {
+            $errors['sabqi_ayat_selesai'] = 'Ayat selesai sabqi harus lebih besar atau sama dengan ayat mulai.';
+        }
+        if ((int)$request->manzil_ayat_selesai < (int)$request->manzil_ayat_mulai) {
+            $errors['manzil_ayat_selesai'] = 'Ayat selesai manzil harus lebih besar atau sama dengan ayat mulai.';
+        }
+
+        if (!empty($errors)) {
+            return back()->withErrors($errors)->withInput();
+        }
+
         // Simpan setoran
         $setoran = Setoran::create([
             'user_id'    => $request->user_id,
@@ -153,6 +170,23 @@ class SetoranController extends Controller
             'manzil_jumlah_halaman' => 'nullable|integer|min:1',
             'manzil_nilai'          => 'nullable|in:L,KL,U',
         ]);
+
+        // Validasi ayat selesai harus >= ayat mulai
+        $errors = [];
+
+        if ((int)$request->sabaq_ayat_selesai < (int)$request->sabaq_ayat_mulai) {
+            $errors['sabaq_ayat_selesai'] = 'Ayat selesai sabaq harus lebih besar atau sama dengan ayat mulai.';
+        }
+        if ((int)$request->sabqi_ayat_selesai < (int)$request->sabqi_ayat_mulai) {
+            $errors['sabqi_ayat_selesai'] = 'Ayat selesai sabqi harus lebih besar atau sama dengan ayat mulai.';
+        }
+        if ((int)$request->manzil_ayat_selesai < (int)$request->manzil_ayat_mulai) {
+            $errors['manzil_ayat_selesai'] = 'Ayat selesai manzil harus lebih besar atau sama dengan ayat mulai.';
+        }
+
+        if (!empty($errors)) {
+            return back()->withErrors($errors)->withInput();
+        }
 
         // Update setoran
         $setoran->update(['tanggal' => $request->tanggal]);
