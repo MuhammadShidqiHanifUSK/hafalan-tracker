@@ -11,7 +11,9 @@ class AdminController extends Controller
     // Tampilkan daftar semua user
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::orderByRaw("FIELD(role, 'admin', 'ustadz', 'santri', 'ortu')")
+            ->orderBy('name')
+            ->get();
         return view('admin.index', compact('users'));
     }
 
