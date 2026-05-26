@@ -223,6 +223,18 @@
             </div>
         </div>
 
+        {{-- Paraf Guru --}}
+        <div class="hafalan-card">
+            <h2 class="hafalan-card-title">✍️ Paraf Guru</h2>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                        <input type="checkbox" name="paraf_guru" value="1" {{ old('paraf_guru') ? 'checked' : '' }}
+                            style="width: 18px; height: 18px; accent-color: #16a34a; cursor: pointer;">
+                        <span style="font-size: 0.875rem; color: #374151; font-weight: 500;">Saya sudah memparaf setoran ini</span>
+                    </label>
+                </div>
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-bottom: 2rem;">
             <a href="{{ route('setoran.index') }}" class="btn-kembali">Batal</a>
             <button type="submit" class="btn-submit">💾 Simpan Setoran</button>
@@ -233,7 +245,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <script>
-    new TomSelect('#select-santri', { maxOptions: 100, allowEmptyOption: true, placeholder: 'Ketik nama santri...' });
+    new TomSelect('#select-santri', { maxOptions: 100, allowEmptyOption: false, placeholder: 'Ketik nama santri...' });
     new TomSelect('#select-sabaq-surah', { maxOptions: 114, allowEmptyOption: false, placeholder: 'Ketik nama atau nomor surah...' });
     new TomSelect('#select-sabqi-surah', { maxOptions: 114, allowEmptyOption: false, placeholder: 'Ketik nama atau nomor surah...' });
     new TomSelect('#select-manzil-surah', { maxOptions: 114, allowEmptyOption: false, placeholder: 'Ketik nama atau nomor surah...' });

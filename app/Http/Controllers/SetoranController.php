@@ -56,7 +56,7 @@ class SetoranController extends Controller
         $setoran = Setoran::create([
             'user_id'    => $request->user_id,
             'tanggal'    => $request->tanggal,
-            'paraf_guru' => false,
+            'paraf_guru' => $request->has('paraf_guru'),
             'paraf_ortu' => false,
         ]);
 

@@ -11,24 +11,40 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
+                <flux:sidebar.group :heading="__('Menu')" class="grid">
+
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        Dashboard
                     </flux:sidebar.item>
+
+                    @if(auth()->user()->role == 'admin')
+                        <flux:sidebar.item icon="users" :href="route('admin.index')" :current="request()->routeIs('admin.*')" wire:navigate>
+                            Manajemen User
+                        </flux:sidebar.item>
+                    @endif
+
+                    @if(auth()->user()->role == 'ustadz')
+                        <flux:sidebar.item icon="book-open" :href="route('setoran.index')" :current="request()->routeIs('setoran.*')" wire:navigate>
+                            Daftar Setoran
+                        </flux:sidebar.item>
+                    @endif
+
+                    @if(auth()->user()->role == 'santri')
+                        <flux:sidebar.item icon="queue-list" :href="route('santri.index')" :current="request()->routeIs('santri.*')" wire:navigate>
+                            Riwayat Setoran
+                        </flux:sidebar.item>
+                    @endif
+
+                    @if(auth()->user()->role == 'ortu')
+                        <flux:sidebar.item icon="eye" :href="route('ortu.index')" :current="request()->routeIs('ortu.*')" wire:navigate>
+                            Setoran Anak
+                        </flux:sidebar.item>
+                    @endif
+
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
-
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>
@@ -36,15 +52,12 @@
         <!-- Mobile User Menu -->
         <flux:header class="lg:hidden">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-
             <flux:spacer />
-
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     :initials="auth()->user()->initials()"
                     icon-trailing="chevron-down"
                 />
-
                 <flux:menu>
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
@@ -53,7 +66,6 @@
                                     :name="auth()->user()->name"
                                     :initials="auth()->user()->initials()"
                                 />
-
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <flux:heading class="truncate">{{ auth()->user()->name }}</flux:heading>
                                     <flux:text class="truncate">{{ auth()->user()->email }}</flux:text>
@@ -61,17 +73,13 @@
                             </div>
                         </div>
                     </flux:menu.radio.group>
-
                     <flux:menu.separator />
-
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
                             {{ __('Settings') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
-
                     <flux:menu.separator />
-
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item
